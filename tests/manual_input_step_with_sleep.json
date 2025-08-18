@@ -1,0 +1,52 @@
+{
+    "elem_id": "uuid-step-1",
+    "elem_type": "STEP",
+    "execution_id": "uuid-execution-12",
+    "description": "First manual input step",
+    "number": "1-1",
+    "step_type": "MANUAL_INPUT",
+    "variable": {"name": "manual_input_step1_result"},
+    "code": {
+        "name": "manual_input_step_with_sleep.run",
+        "commit": "",
+        "release": ""
+    },
+    "guard": "",
+    "notices": [
+        {
+            "category": "TESTBED_WARNING",
+            "message": "This is a warning for test bed"
+        },
+        {
+            "category": "PERSONNEL_CAUTION",
+            "message": "This is a caution for personnel"
+        }
+    ],
+    "specification": {
+        "entries": [
+        ]
+    },
+    "authoring_user_input": {
+        "entries": [
+            {"name": "var1", "type": "FLOAT", "verify_on": "VALUE", "verification_condition": "RECORD", "verification_values": []},
+            {"name": "var2", "type": "FLOAT", "verify_on": "VALUE", "verification_condition": "RECORD", "verification_values": []}
+        ]
+    },    
+    "execution_user_input": {
+        "entries": [
+            {"name": "var1", "type": "FLOAT", "verify_on": "VALUE", "verification_condition": "RECORD", "verification_values": [], "actual_value": 1.2},
+            {"name": "var2", "type": "FLOAT", "verify_on": "VALUE", "verification_condition": "RECORD", "verification_values": [], "actual_value": 2.3}
+        ]
+    },
+    "execution": {
+        "meta_data": {
+            "test_conductor": "hongmank",
+            "status": "",
+            "time_started": "",
+            "time_completed": "",
+            "message": ""
+        },
+        "results": {
+        }
+    }
+}

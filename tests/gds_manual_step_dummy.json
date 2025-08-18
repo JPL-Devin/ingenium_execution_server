@@ -1,0 +1,35 @@
+{
+    "elem_id": "uuid-step-1",
+    "elem_type": "STEP",
+    "execution_id": "",
+    "description": "Dummy GDS manual step",
+    "number": "1",
+    "step_type": "GDS_MANUAL",
+    "variable": {},
+    "code": {
+        "name": "gds_manual_step.run_dummy",
+        "commit": "",
+        "release": ""
+    },
+    "guard": "",
+    "notices": [],
+    "specification": {},
+    "authoring_user_input": {},    
+    "execution_user_input": {
+        "entries": [
+            {"data_path": "side A", "session_id": "123"},
+            {"data_path": "side B", "session_id": "124"}
+        ]
+    },
+    "execution": {
+        "meta_data": {
+            "test_conductor": "hongmank",
+            "status": "",
+            "time_started": "",
+            "time_completed": "",
+            "error": {}
+        },
+        "results": {
+        }
+    }
+}

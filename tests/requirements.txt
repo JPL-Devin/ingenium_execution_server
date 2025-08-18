@@ -1,0 +1,10 @@
+tornado==5.1.1
+futures==3.0.5
+PyJWT==1.7.0
+redis==2.10.6
+requests==2.20.1
+python-dateutil==2.6.1
+cryptography==2.4.2
+unittest-xml-reporting==2.4.0
+json-logging==1.2.0
+boto3==1.15.8

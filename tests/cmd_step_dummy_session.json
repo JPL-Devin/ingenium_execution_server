@@ -1,0 +1,33 @@
+{
+    "elem_id": "uuid-step-1",
+    "elem_type": "STEP",
+    "execution_id": "",
+    "description": "Dummy Command step",
+    "number": "1",
+    "step_type": "CMD",
+    "variable": {},
+    "code": {
+        "name": "cmd_step.run_dummy_get_session_info",
+        "commit": "",
+        "release": ""
+    },
+    "guard": "",
+    "notices": [],
+    "specification": {},
+    "authoring_user_input": {},    
+    "execution_user_input": {
+        "data_path": "",
+        "entries": []
+    },
+    "execution": {
+        "meta_data": {
+            "test_conductor": "hongmank",
+            "status": "",
+            "time_started": "",
+            "time_completed": "",
+            "error": {}
+        },
+        "results": {
+        }
+    }
+}
