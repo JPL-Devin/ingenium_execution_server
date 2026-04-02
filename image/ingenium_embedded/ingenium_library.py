@@ -126,7 +126,7 @@ if use_execution_cache:
             }
         })
 
-    redis_client = redis.StrictRedis(host=redis_host, port=redis_port)
+    redis_client = redis.StrictRedis(host=redis_host, port=redis_port, decode_responses=True)
 
 def determine_cmd_failure(step_type, verify, entry):
 
@@ -154,19 +154,19 @@ def get_empty_str_by_default(str_value):
     if str_value is None:
         return ''
     else:
-        return str_value.decode('utf-8')    
+        return str_value    
 
 def get_empty_dict_by_default(str_value):
     if str_value is None:
         return {}        
     else:
-        return json.loads(str_value.decode('utf-8'))
+        return json.loads(str_value)
 
 def get_empty_array_by_default(str_value):
     if str_value is None:
         return [] 
     else:
-        return json.loads(str_value.decode('utf-8'))        
+        return json.loads(str_value)        
 
 def store_execution_cache(execution_id):
         if use_execution_cache:
@@ -192,7 +192,7 @@ def store_execution_cache(execution_id):
             }
 
             exec_hash = HASH_TEMPLATE.format(execution_id)
-            redis_client.hmset(exec_hash, input_dict)
+            redis_client.hset(exec_hash, mapping=input_dict)
         else:
             logger.info('reload_execution_cache: use_execution_cache is False', extra= {
                 "event": EventName.STORE_EXECUTION_CACHE.value
@@ -258,7 +258,7 @@ def store_current_step_cache(execution_id, step):
         }
 
         exec_hash = HASH_TEMPLATE.format(execution_id)
-        redis_client.hmset(exec_hash, input_dict)
+        redis_client.hset(exec_hash, mapping=input_dict)
     else:
         logger.info('store_current_step_cache: use_execution_cache is False', extra= {
             "event": EventName.STORE_EXECUTION_CACHE.value
@@ -324,7 +324,7 @@ def copy_execution_state(execution_id, target_execution_id):
             #logger.info(json.dumps(input_dict))
 
             target_exec_hash = HASH_TEMPLATE.format(target_execution_id)
-            redis_client.hmset(target_exec_hash, input_dict)
+            redis_client.hset(target_exec_hash, mapping=input_dict)
 
             value_strs = redis_client.hmget(target_exec_hash, keys)  
             #logger.info('value_strs:')
@@ -1607,20 +1607,22 @@ def decode_ingenium_token(verify=True):
 
     token = ic.ing_token
     ingenium_public_pem = os.environ.get("PUBLIC_PEM")
+    options = {"verify_signature": verify, "verify_exp": verify}
     decoded = jwt.decode(token,
                          ingenium_public_pem,
-                         algorithm="RS256",
-                         verify=verify)
+                         algorithms=["RS256"],
+                         options=options)
     return decoded
 
 def decode_venue_token(verify=True):
 
     token = ic.venue_token
     exec_public_pem = os.environ.get("EXEC_VENUE_PUBLIC_PEM")
+    options = {"verify_signature": verify, "verify_exp": verify}
     decoded = jwt.decode(token,
                          exec_public_pem,
-                         algorithm="RS256",
-                         verify=verify)
+                         algorithms=["RS256"],
+                         options=options)
     return decoded
 
 def refresh_venue_tokens():
@@ -1650,12 +1652,12 @@ def refresh_venue_tokens():
     new_venue_token = jwt.encode(jwt_info,
                            exec_private_pem,
                            algorithm="RS256")
-    # jwt.encode() returns bytes array. Convert to string
-    ic.venue_token = new_venue_token.decode('utf-8') 
+    # jwt.encode() returns a string in PyJWT 2.x
+    ic.venue_token = new_venue_token 
 
     # update cache in redis
     exec_hash = HASH_TEMPLATE.format(ic.execution_id)
-    redis_client.hmset(exec_hash, {'venue_token': ic.venue_token})
+    redis_client.hset(exec_hash, mapping={'venue_token': ic.venue_token})
 
 
 def refresh_ingenium_token():
@@ -1685,12 +1687,12 @@ def refresh_ingenium_token():
     new_ing_token = jwt.encode(jwt_info,
                            ing_private_pem,
                            algorithm="RS256")
-    # jwt.encode() returns bytes array. Convert to string
-    ic.ing_token = new_ing_token.decode('utf-8')
+    # jwt.encode() returns a string in PyJWT 2.x
+    ic.ing_token = new_ing_token
 
     # update cache in redis
     exec_hash = HASH_TEMPLATE.format(ic.execution_id)
-    redis_client.hmset(exec_hash, {'ing_token': ic.ing_token})
+    redis_client.hset(exec_hash, mapping={'ing_token': ic.ing_token})
 
 def get_authorization_header():
     # make a deep copy not to change the base headers

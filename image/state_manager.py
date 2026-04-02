@@ -9,7 +9,7 @@ class StateManager(object):
     HASH_TEMPLATE = 'execution_id:{}'
 
     def __init__(self, redis_host, redis_port):   
-        self.redis_client = redis.StrictRedis(host=redis_host, port=redis_port)        
+        self.redis_client = redis.StrictRedis(host=redis_host, port=redis_port, decode_responses=True)        
 
     def set_config_value(self, execution_id, key, value_str):
         hash = StateManager.HASH_TEMPLATE.format(execution_id)
@@ -22,7 +22,7 @@ class StateManager(object):
         value_str = self.redis_client.hget(hash, key) 
         value = None   
         if value_str is not None:
-            value = value_str.decode('utf-8')
+            value = value_str
         
         # logger.debug('get_config_value execution_id: %s key: %s value:%s', 
         #    execution_id, key, value)   
@@ -35,7 +35,7 @@ class StateManager(object):
             # TODO: throw an error
             logger.warn('configuration variable not found: manual_input_variables')
         else:
-            manual_input_variables = json.loads(manual_input_variables_str.decode('utf-8'))
+            manual_input_variables = json.loads(manual_input_variables_str)
             manual_input_variables[var_name]=value
             
             self.redis_client.hset(hash, 'manual_input_variables', json.dumps(manual_input_variables)) 
@@ -47,9 +47,9 @@ class StateManager(object):
         if manual_input_variables_str is None:
             return None
         else:
-            manual_input_variables = json.loads(manual_input_variables_str.decode('utf-8'))
+            manual_input_variables = json.loads(manual_input_variables_str)
             return manual_input_variables.get(var_name)            
 
     def delete_execution(self, execution_id):
         hash = StateManager.HASH_TEMPLATE.format(execution_id)        
-        self.redis_client.delete(hash)    
+        self.redis_client.delete(hash)        

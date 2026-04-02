@@ -1,4 +1,4 @@
-FROM cae-artifactory.jpl.nasa.gov:17001/python:3.7.2
+FROM python:3.12-slim
 
 ### Execution Server
 WORKDIR /app
