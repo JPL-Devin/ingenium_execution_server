@@ -26,7 +26,13 @@ jobs:
         working-directory: ./image
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt -r requirements-test.txt
+          # Strip JPL-internal index URL (unreachable from GitHub Actions) and
+          # redis line (installed separately to avoid PyJWT version conflict)
+          sed -e '/extra-index-url/d' -e '/^redis/d' requirements.txt > requirements-ci.txt
+          pip install -r requirements-ci.txt -r requirements-test.txt
+          # redis 5.3.0 declares PyJWT~=2.9.0 but this project pins PyJWT==2.12.1;
+          # the PyJWT dep is only needed for Redis JWT auth which is unused here
+          pip install --no-deps redis==5.3.0
 
       - name: Run tests
         working-directory: ./image
